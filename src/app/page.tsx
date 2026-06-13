@@ -700,12 +700,12 @@ export default function DashboardPage() {
                       <tbody>
                         {harvestWindows.slice(0, 3).map((win, idx) => (
                           <tr key={idx} style={{ backgroundColor: idx === 0 ? 'rgba(16, 185, 129, 0.05)' : 'transparent' }}>
-                            <td style={{ fontWeight: 600 }}>{idx === 0 ? '🏆 Prioritaria' : `Alternativa ${idx}`}</td>
-                            <td>{win.inicio}</td>
-                            <td>{win.fin}</td>
-                            <td style={{ color: '#10B981', fontWeight: 600 }}>{win.horas} horas</td>
-                            <td>{win.oleajeMax} m</td>
-                            <td>{(win.riesgoPromedio * 100).toFixed(0)}%</td>
+                            <td data-label="Recomendación" style={{ fontWeight: 600 }}>{idx === 0 ? '🏆 Prioritaria' : `Alternativa ${idx}`}</td>
+                            <td data-label="Inicio Ventana">{win.inicio}</td>
+                            <td data-label="Fin Ventana">{win.fin}</td>
+                            <td data-label="Duración" style={{ color: '#10B981', fontWeight: 600 }}>{win.horas} horas</td>
+                            <td data-label="Oleaje Máx">{win.oleajeMax} m</td>
+                            <td data-label="Riesgo Medio">{(win.riesgoPromedio * 100).toFixed(0)}%</td>
                           </tr>
                         ))}
                       </tbody>
@@ -736,10 +736,10 @@ export default function DashboardPage() {
                       <tbody>
                         {maintenanceWindows.slice(0, 3).map((win, idx) => (
                           <tr key={idx}>
-                            <td>{win.inicio}</td>
-                            <td>{win.fin}</td>
-                            <td><strong>{win.horas} horas</strong></td>
-                            <td>
+                            <td data-label="Rango Horario">{win.inicio}</td>
+                            <td data-label="Término Ventana">{win.fin}</td>
+                            <td data-label="Duración"><strong>{win.horas} horas</strong></td>
+                            <td data-label="Categoría">
                               <span className="badge" style={{ backgroundColor: 'rgba(127,119,221,0.1)', color: '#AFA9EC' }}>
                                 Buceo Seguro
                               </span>
@@ -800,11 +800,11 @@ export default function DashboardPage() {
                       <tbody>
                         {oxygenationEpisodes.slice(0, 3).map((ep, idx) => (
                           <tr key={idx}>
-                            <td>{ep.inicio}</td>
-                            <td>{ep.fin}</td>
-                            <td style={{ color: '#EF4444', fontWeight: 600 }}>{ep.horas} horas</td>
-                            <td>{ep.corrienteMin} m/s</td>
-                            <td>
+                            <td data-label="Fecha Inicio">{ep.inicio}</td>
+                            <td data-label="Fecha Fin">{ep.fin}</td>
+                            <td data-label="Duración Crítica" style={{ color: '#EF4444', fontWeight: 600 }}>{ep.horas} horas</td>
+                            <td data-label="Vel. Mínima">{ep.corrienteMin} m/s</td>
+                            <td data-label="Contingencia">
                               <span className="badge" style={{ backgroundColor: 'rgba(239,68,68,0.1)', color: '#EF4444' }}>
                                 Activar Difusores O2
                               </span>
@@ -839,10 +839,10 @@ export default function DashboardPage() {
                       <tbody>
                         {fanAlertPeriods.slice(0, 3).map((p, idx) => (
                           <tr key={idx}>
-                            <td>{p.inicio}</td>
-                            <td>{p.fin}</td>
-                            <td>{p.horas} horas</td>
-                            <td style={{ color: '#F59E0B', fontWeight: 600 }}>{(p.indiceMax * 100).toFixed(0)}%</td>
+                            <td data-label="Periodo Detectado">{p.inicio}</td>
+                            <td data-label="Fin Periodo">{p.fin}</td>
+                            <td data-label="Horas Acumuladas">{p.horas} horas</td>
+                            <td data-label="Riesgo Máx" style={{ color: '#F59E0B', fontWeight: 600 }}>{(p.indiceMax * 100).toFixed(0)}%</td>
                           </tr>
                         ))}
                       </tbody>

@@ -625,15 +625,61 @@ h1, h2, h3, h4, h5, h6 {
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 0.75rem;
   }
+  body, .appContainer, .mainContent {
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
 
-  .table th {
-    padding: 0.5rem 0.6rem;
-    font-size: 0.7rem;
+  .table {
+    display: block;
+    width: 100%;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    display: block;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    box-sizing: border-box;
   }
 
   .table td {
-    padding: 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(175, 169, 236, 0.05);
+    font-size: 0.8rem;
+    text-align: right;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .table td:last-child {
+    border-bottom: none;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: left;
+    margin-right: 1rem;
     font-size: 0.75rem;
+    text-transform: uppercase;
   }
 
   .sliderHeader {
