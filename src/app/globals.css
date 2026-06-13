@@ -574,10 +574,21 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 1000;
   }
 
-  .logoArea,
+  .sidebar .logoArea,
   .sidebarCenterInfo,
   .sidebarFooter {
     display: none;
+  }
+
+  .titleArea h1 {
+    font-size: 1.45rem !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal !important;
+  }
+
+  .titleArea p {
+    font-size: 0.8rem;
   }
 
   .navMenu {
@@ -625,9 +636,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 1.5rem;
   }
 
-  .titleArea h1 {
-    font-size: 1.65rem;
-  }
+
 
   .statusBanner {
     flex-direction: column;
