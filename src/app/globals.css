@@ -458,6 +458,19 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.cageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.cageDetailGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
 /* Responsive Styles */
 @media (max-width: 1024px) {
   .sidebar {
@@ -605,5 +618,11 @@ h1, h2, h3, h4, h5, h6 {
 
   .card {
     padding: 1.25rem;
+  }
+
+  .cageGrid,
+  .cageDetailGrid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.75rem;
   }
 }

@@ -551,11 +551,7 @@ export default function DashboardPage() {
                   Sensores IoT sumergidos en tiempo real por cada jaula. Monitoreo de oxígeno disuelto y consumo de alimento. Los valores varían en vivo simulando telemetría real.
                 </p>
 
-                <div style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', 
-                  gap: '1rem' 
-                }}>
+                <div className="cageGrid">
                   {cageList.map((cage) => {
                     const isLowO2 = cage.oxygen < 6.5;
                     const isFast = cage.feedingRate === 0;
@@ -618,7 +614,7 @@ export default function DashboardPage() {
                   const cageObj = cageList.find(c => c.id === selectedCage);
                   if (!cageObj) return null;
                   return (
-                    <div className="gridKpi" style={{ marginTop: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
+                    <div className="cageDetailGrid">
                       <div className="card kpiCard" style={{ backgroundColor: '#16161A' }}>
                         <span className="kpiTitle">Biomasa Estimada</span>
                         <span className="kpiValue">{(cageObj.fishCount * cageObj.avgWeight / 1000).toFixed(1)} Ton</span>
