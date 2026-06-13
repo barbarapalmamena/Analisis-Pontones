@@ -599,9 +599,22 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .gridKpi {
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
     margin-bottom: 1.5rem;
+  }
+
+  .gridKpi > *:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+
+  @media (max-width: 400px) {
+    .gridKpi {
+      grid-template-columns: 1fr;
+    }
+    .gridKpi > *:last-child:nth-child(odd) {
+      grid-column: span 1;
+    }
   }
 
   .kpiCard {
