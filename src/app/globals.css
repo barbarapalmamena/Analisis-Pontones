@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Paleta oficial de agents.md */
+  /* Paleta oficial */
   --bg-color: #16161A;
   --surface-color: #2C2C2A;
   --accent-color: #7F77DD;
@@ -21,6 +21,13 @@
   /* Fuentes */
   --font-title: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Responsive Fonts using clamp() */
+  --h1-size: clamp(1.4rem, 4vw, 2.25rem);
+  --h2-size: clamp(1.15rem, 3vw, 1.5rem);
+  --h3-size: clamp(1rem, 2.5vw, 1.25rem);
+  --body-size: clamp(0.85rem, 1.5vw, 0.95rem);
+  --kpi-value-size: clamp(1.3rem, 3.5vw, 1.75rem);
 }
 
 * {
@@ -33,15 +40,30 @@ body {
   background-color: var(--bg-color);
   color: var(--text-light);
   font-family: var(--font-body);
+  font-size: var(--body-size);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1 {
+  font-size: var(--h1-size);
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: var(--h2-size);
   font-family: var(--font-title);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: var(--h3-size);
+  font-family: var(--font-title);
+  font-weight: 600;
 }
 
 /* Scrollbar styling */
@@ -241,17 +263,38 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2.5rem;
+  gap: 1.5rem;
 }
 
-.titleArea h1 {
-  font-size: 2.25rem;
-  color: var(--text-light);
-  margin-bottom: 0.5rem;
+.titleArea {
+  flex-grow: 1;
 }
 
 .titleArea p {
   color: var(--text-muted);
   font-size: 1rem;
+}
+
+.liveCard {
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Loading Screen */
+.loadingScreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #16161A;
+  color: #F0EFFF;
+}
+
+.loadingCenter {
+  text-align: center;
 }
 
 /* Glassmorphism Cards */
@@ -293,7 +336,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .kpiValue {
   font-family: var(--font-title);
-  font-size: 1.75rem;
+  font-size: var(--kpi-value-size);
   font-weight: 700;
   color: var(--text-light);
 }
@@ -315,6 +358,25 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 16px;
   margin-bottom: 2.5rem;
   box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.status-cerrado {
+  background-color: rgba(239, 68, 68, 0.15);
+  border: 1px solid #EF4444;
+  color: #FEE2E2;
+}
+
+.status-alerta {
+  background-color: rgba(245, 158, 11, 0.15);
+  border: 1px solid #F59E0B;
+  color: #FEF3C7;
+}
+
+.status-operativo {
+  background-color: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10B981;
+  color: #D1FAE5;
 }
 
 .statusIndicator {
@@ -327,7 +389,6 @@ h1, h2, h3, h4, h5, h6 {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  box-shadow: 0 0 16px currentColor;
   position: relative;
 }
 
@@ -344,14 +405,36 @@ h1, h2, h3, h4, h5, h6 {
   animation: pulse 2s infinite;
 }
 
+.statusDot-cerrado {
+  color: #EF4444;
+  background-color: #EF4444;
+  box-shadow: 0 0 16px #EF4444;
+}
+
+.statusDot-alerta {
+  color: #F59E0B;
+  background-color: #F59E0B;
+  box-shadow: 0 0 16px #F59E0B;
+}
+
+.statusDot-operativo {
+  color: #10B981;
+  background-color: #10B981;
+  box-shadow: 0 0 16px #10B981;
+}
+
 .statusInfo h2 {
-  font-size: 1.5rem;
+  font-size: var(--h2-size);
   font-weight: 700;
 }
 
 .statusInfo p {
   font-size: 0.9rem;
   opacity: 0.8;
+}
+
+.statusValueBox {
+  text-align: right;
 }
 
 /* Dashboard Sections */
@@ -366,12 +449,14 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0; /* Prevents flex children from overflowing */
 }
 
 .sidebarSection {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0;
 }
 
 /* Charts & Graphs Container */
@@ -426,6 +511,7 @@ h1, h2, h3, h4, h5, h6 {
 .tableWrapper {
   overflow-x: auto;
   margin-top: 1rem;
+  width: 100%;
 }
 
 .table {
@@ -516,7 +602,30 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 1.5rem;
 }
 
-/* Responsive Styles */
+/* Sub-lists info helper classes */
+.infoList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.infoLabel {
+  color: var(--text-muted);
+}
+
+.infoValue {
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* Responsive Breakpoints */
 @media (max-width: 1024px) {
   .sidebar {
     width: 80px;
@@ -636,7 +745,10 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 1.5rem;
   }
 
-
+  .liveCard {
+    padding: 0.75rem 1rem;
+    justify-content: center;
+  }
 
   .statusBanner {
     flex-direction: column;
@@ -646,8 +758,8 @@ h1, h2, h3, h4, h5, h6 {
     text-align: left;
   }
 
-  .statusBanner div[style*="text-align: right"] {
-    text-align: left !important;
+  .statusValueBox {
+    text-align: left;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding-top: 0.75rem;
   }
@@ -662,21 +774,8 @@ h1, h2, h3, h4, h5, h6 {
     grid-column: span 2;
   }
 
-  @media (max-width: 400px) {
-    .gridKpi {
-      grid-template-columns: 1fr;
-    }
-    .gridKpi > *:last-child:nth-child(odd) {
-      grid-column: span 1;
-    }
-  }
-
   .kpiCard {
     padding: 1rem;
-  }
-
-  .kpiValue {
-    font-size: 1.4rem;
   }
 
   .chartContainer {
@@ -689,15 +788,17 @@ h1, h2, h3, h4, h5, h6 {
 
   .cageGrid,
   .cageDetailGrid {
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 0.75rem;
   }
+  
   body, .appContainer, .mainContent {
     max-width: 100vw;
     overflow-x: hidden;
     box-sizing: border-box;
   }
 
+  /* Responsive Tables */
   .table {
     display: block;
     width: 100%;
@@ -772,3 +873,37 @@ h1, h2, h3, h4, h5, h6 {
     gap: 0.5rem;
   }
 }
+
+@media (max-width: 480px) {
+  .gridKpi {
+    grid-template-columns: 1fr;
+  }
+  .gridKpi > *:last-child:nth-child(odd) {
+    grid-column: span 1;
+  }
+}
+
+/* Custom HTML Legends for Recharts */
+.customLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 0.75rem 0 1rem 0;
+  font-size: 0.85rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.legendDot {
+  width: 16px;
+  height: 4px;
+  border-radius: 2px;
+  display: inline-block;
+}
+

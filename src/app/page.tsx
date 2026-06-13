@@ -58,6 +58,17 @@ export default function DashboardPage() {
   const [baseData, setBaseData] = useState<MeteorologicalData[]>([]);
   const [dataSourceMode, setDataSourceMode] = useState<'SIMULACION' | 'API_REAL'>('SIMULACION');
   
+  // Detección responsiva en el lado del cliente
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Lista de jaulas reactiva
   const [cageList, setCageList] = useState([
     { id: 101, status: 'OPERATIVO', oxygen: 8.2, temp: 10.2, fishCount: 42000, avgWeight: 3.8, feedingRate: 98 },
@@ -211,8 +222,8 @@ export default function DashboardPage() {
 
   if (baseData.length === 0) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#16161A', color: '#F0EFFF' }}>
-        <div style={{ textAlign: 'center' }}>
+      <div className="loadingScreen">
+        <div className="loadingCenter">
           <Activity size={48} className="statusDot" style={{ color: '#7F77DD', animation: 'pulse 1.5s infinite', margin: '0 auto 1rem auto' }} />
           <h2 style={{ fontFamily: 'var(--font-title)' }}>Inicializando boya oceanográfica...</h2>
         </div>
@@ -346,25 +357,18 @@ export default function DashboardPage() {
             <p>Monitoreo climático, oceanográfico e IoT para la toma de decisiones en el centro de cultivo.</p>
           </div>
           
-          <div className="card" style={{ padding: '0.75rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div className="card liveCard">
             <Clock size={16} color="#AFA9EC" />
-            <span style={{ fontSize: '0.9rem', color: '#F0EFFF' }}>
+            <span style={{ color: '#F0EFFF' }}>
               Transmisión en vivo: <strong>{latestData.dateStr}</strong>
             </span>
           </div>
         </header>
 
         {/* Semáforo de Estado Operativo del Centro (Pontón + Faenas) */}
-        <div className="statusBanner" style={{
-          backgroundColor: latestState === 'CERRADO' ? 'rgba(239, 68, 68, 0.15)' : latestState === 'ALERTA' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)',
-          border: `1px solid ${latestState === 'CERRADO' ? '#EF4444' : latestState === 'ALERTA' ? '#F59E0B' : '#10B981'}`,
-          color: latestState === 'CERRADO' ? '#FEE2E2' : latestState === 'ALERTA' ? '#FEF3C7' : '#D1FAE5'
-        }}>
+        <div className={`statusBanner status-${latestState.toLowerCase()}`}>
           <div className="statusIndicator">
-            <div className="statusDot" style={{
-              color: latestState === 'CERRADO' ? '#EF4444' : latestState === 'ALERTA' ? '#F59E0B' : '#10B981',
-              backgroundColor: latestState === 'CERRADO' ? '#EF4444' : latestState === 'ALERTA' ? '#F59E0B' : '#10B981'
-            }} />
+            <div className={`statusDot statusDot-${latestState.toLowerCase()}`} />
             <div className="statusInfo">
               <h2>ESTADO DEL PONTÓN: {latestState}</h2>
               <p>
@@ -376,13 +380,11 @@ export default function DashboardPage() {
               </p>
             </div>
           </div>
-          <div style={{ textAlign: 'right' }}>
+          <div className="statusValueBox">
             <span style={{ fontSize: '0.8rem', opacity: 0.7, display: 'block', textTransform: 'uppercase' }}>Altura de Ola</span>
             <span style={{ fontSize: '1.75rem', fontWeight: 700 }}>{latestData.wave_height} m</span>
           </div>
         </div>
-
-
 
         {/* PESTAÑA 1: TELEMETRÍA Y CLIMA */}
         {activeTab === 'telemetria' && (
@@ -429,15 +431,26 @@ export default function DashboardPage() {
                 {/* Gráfico de Oleaje y Swell con Pronóstico */}
                 <div className="card">
                   <h3>Altura de Olas y Pronóstico de Oleaje (+3h)</h3>
-                  <p style={{ fontSize: '0.85rem', color: '#94A3B8', marginBottom: '1rem' }}>
+                  <p style={{ color: '#94A3B8', marginBottom: '1rem' }}>
                     Historial de sensores de boya oceanográfica y predicción para planificación de cosechas.
                   </p>
                   
+                  <div className="customLegend">
+                    <div className="legendItem">
+                      <span className="legendDot" style={{ backgroundColor: '#7F77DD' }} />
+                      <span>Oleaje Real (m)</span>
+                    </div>
+                    <div className="legendItem">
+                      <span className="legendDot" style={{ borderTop: '2px dashed #10B981', width: '16px', height: '0' }} />
+                      <span>Proyección de Oleaje (+3h)</span>
+                    </div>
+                  </div>
+
                   <div className="chartContainer">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart
-                        data={baseData.slice(-48)}
-                        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                        data={baseData.slice(isMobile ? -24 : -48)}
+                        margin={{ top: 10, right: isMobile ? 10 : 30, left: isMobile ? -15 : 0, bottom: 0 }}
                       >
                         <defs>
                           <linearGradient id="colorWave" x1="0" y1="0" x2="0" y2="1">
@@ -446,10 +459,15 @@ export default function DashboardPage() {
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(175,169,236,0.1)" />
-                        <XAxis dataKey="dateStr" stroke="#94A3B8" fontSize={9} tickLine={false} />
-                        <YAxis stroke="#94A3B8" fontSize={9} tickLine={false} />
-                        <Tooltip contentStyle={{ backgroundColor: '#2C2C2A', border: '1px solid rgba(175,169,236,0.2)', color: '#F0EFFF' }} />
-                        <Legend verticalAlign="top" height={36}/>
+                        <XAxis 
+                          dataKey="dateStr" 
+                          stroke="#94A3B8" 
+                          fontSize={8} 
+                          tickLine={false} 
+                          interval={isMobile ? 5 : 2}
+                        />
+                        <YAxis stroke="#94A3B8" fontSize={8} tickLine={false} />
+                        <Tooltip contentStyle={{ backgroundColor: '#2C2C2A', border: '1px solid rgba(175,169,236,0.2)', color: '#F0EFFF', fontSize: '0.8rem' }} />
                         <Area type="monotone" dataKey="wave_height" name="Oleaje Real (m)" stroke="#7F77DD" fillOpacity={1} fill="url(#colorWave)" strokeWidth={2} />
                         <Line type="monotone" dataKey="wave_height_forecast" name="Proyección de Oleaje (+3h)" stroke="#10B981" strokeWidth={2} strokeDasharray="5 5" dot={false} />
                       </AreaChart>
@@ -460,17 +478,34 @@ export default function DashboardPage() {
                 {/* Gráfico de Viento Medio y Ráfagas */}
                 <div className="card">
                   <h3>Anemómetro: Viento y Rachas Máximas (km/h)</h3>
+                  
+                  <div className="customLegend">
+                    <div className="legendItem">
+                      <span className="legendDot" style={{ backgroundColor: '#F59E0B' }} />
+                      <span>Velocidad del Viento (km/h)</span>
+                    </div>
+                    <div className="legendItem">
+                      <span className="legendDot" style={{ backgroundColor: '#EF4444' }} />
+                      <span>Rachas (km/h)</span>
+                    </div>
+                  </div>
+
                   <div className="chartContainer">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart
-                        data={baseData.slice(-48)}
-                        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                        data={baseData.slice(isMobile ? -24 : -48)}
+                        margin={{ top: 10, right: isMobile ? 10 : 30, left: isMobile ? -15 : 0, bottom: 0 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(175,169,236,0.1)" />
-                        <XAxis dataKey="dateStr" stroke="#94A3B8" fontSize={9} tickLine={false} />
-                        <YAxis stroke="#94A3B8" fontSize={9} tickLine={false} />
-                        <Tooltip contentStyle={{ backgroundColor: '#2C2C2A', border: '1px solid rgba(175,169,236,0.2)', color: '#F0EFFF' }} />
-                        <Legend verticalAlign="top" height={36}/>
+                        <XAxis 
+                          dataKey="dateStr" 
+                          stroke="#94A3B8" 
+                          fontSize={8} 
+                          tickLine={false} 
+                          interval={isMobile ? 5 : 2}
+                        />
+                        <YAxis stroke="#94A3B8" fontSize={8} tickLine={false} />
+                        <Tooltip contentStyle={{ backgroundColor: '#2C2C2A', border: '1px solid rgba(175,169,236,0.2)', color: '#F0EFFF', fontSize: '0.8rem' }} />
                         <Line type="monotone" dataKey="wind_speed_10m" name="Velocidad del Viento (km/h)" stroke="#F59E0B" strokeWidth={2} dot={false} />
                         <Line type="monotone" dataKey="wind_gusts_10m" name="Rachas (km/h)" stroke="#EF4444" strokeWidth={1.5} dot={false} />
                       </LineChart>
@@ -483,17 +518,17 @@ export default function DashboardPage() {
                 {/* Distribución de Estados en el Periodo */}
                 <div className="card">
                   <h3>Resumen Operativo (10 días)</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#10B981' }}>Operativo:</span>
+                  <div className="infoList">
+                    <div className="infoRow">
+                      <span style={{ color: 'var(--success)', fontWeight: 600 }}>Operativo:</span>
                       <strong>{dynamicSummary.horasOperativo} hrs ({(dynamicSummary.horasOperativo / 2.4).toFixed(1)}%)</strong>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#F59E0B' }}>Alerta:</span>
+                    <div className="infoRow">
+                      <span style={{ color: 'var(--warning)', fontWeight: 600 }}>Alerta:</span>
                       <strong>{dynamicSummary.horasAlerta} hrs ({(dynamicSummary.horasAlerta / 2.4).toFixed(1)}%)</strong>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#EF4444' }}>Cerrado:</span>
+                    <div className="infoRow">
+                      <span style={{ color: 'var(--danger)', fontWeight: 600 }}>Cerrado:</span>
                       <strong>{dynamicSummary.horasCerrado} hrs ({(dynamicSummary.horasCerrado / 2.4).toFixed(1)}%)</strong>
                     </div>
                   </div>
@@ -517,22 +552,22 @@ export default function DashboardPage() {
                 {/* Telemetría Atmosférica */}
                 <div className="card">
                   <h3>Boya Telemetría</h3>
-                  <div style={{ fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#94A3B8' }}>Estación base:</span>
-                      <span>Canal Tenglo I</span>
+                  <div className="infoList">
+                    <div className="infoRow">
+                      <span className="infoLabel">Estación base:</span>
+                      <span className="infoValue">Canal Tenglo I</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#94A3B8' }}>Sensor de Corriente:</span>
-                      <span>{latestData.ocean_current_velocity} m/s</span>
+                    <div className="infoRow">
+                      <span className="infoLabel">Sensor de Corriente:</span>
+                      <span className="infoValue">{latestData.ocean_current_velocity} m/s</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#94A3B8' }}>Precipitaciones:</span>
-                      <span>{latestData.precipitation} mm</span>
+                    <div className="infoRow">
+                      <span className="infoLabel">Precipitaciones:</span>
+                      <span className="infoValue">{latestData.precipitation} mm</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#94A3B8' }}>Cobertura nubes:</span>
-                      <span>{latestData.cloud_cover}%</span>
+                    <div className="infoRow">
+                      <span className="infoLabel">Cobertura nubes:</span>
+                      <span className="infoValue">{latestData.cloud_cover}%</span>
                     </div>
                   </div>
                 </div>
