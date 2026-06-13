@@ -259,7 +259,7 @@ export default function DashboardPage() {
           <span className="logoText">Australis Link</span>
         </div>
 
-        <div style={{ padding: '0 0.5rem 1.5rem 0.5rem', borderBottom: '1px solid var(--border-color)', marginBottom: '1.5rem' }}>
+        <div className="sidebarCenterInfo">
           <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Centro Activo</span>
           <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-light)' }}>Canal Tenglo I</span>
           <span style={{ fontSize: '0.75rem', color: 'var(--accent-soft)', display: 'block' }}>ID: PM-849-01</span>
@@ -271,7 +271,7 @@ export default function DashboardPage() {
             onClick={() => setActiveTab('telemetria')}
           >
             <Activity size={18} />
-            <span>Telemetría y Clima</span>
+            <span>Telemetría</span>
           </button>
 
           <button 
@@ -279,7 +279,7 @@ export default function DashboardPage() {
             onClick={() => setActiveTab('jaulas')}
           >
             <Layers size={18} />
-            <span>Estado de Jaulas</span>
+            <span>Jaulas</span>
           </button>
           
           <button 
@@ -287,7 +287,7 @@ export default function DashboardPage() {
             onClick={() => setActiveTab('logistica')}
           >
             <Ship size={18} />
-            <span>Logística y Faenas</span>
+            <span>Logística</span>
           </button>
           
           <button 
@@ -295,7 +295,7 @@ export default function DashboardPage() {
             onClick={() => setActiveTab('alertas')}
           >
             <ShieldAlert size={18} />
-            <span>Alertas Tempranas</span>
+            <span>Alertas</span>
           </button>
           
           <button 
@@ -303,7 +303,7 @@ export default function DashboardPage() {
             onClick={() => setActiveTab('sensibilidad')}
           >
             <DollarSign size={18} />
-            <span>Riesgo Financiero</span>
+            <span>Riesgo</span>
           </button>
         </nav>
 
@@ -316,6 +316,15 @@ export default function DashboardPage() {
 
       {/* Contenedor principal de contenidos */}
       <main className="mainContent">
+        
+        {/* Cabecera Móvil (sólo visible en móviles) */}
+        <div className="mobileTopBar">
+          <div className="logoArea">
+            <Cpu size={22} color="#7F77DD" />
+            <span className="logoText">Australis Link</span>
+          </div>
+          <span className="mobileCenterBadge">Tenglo I</span>
+        </div>
         
         {/* Cabecera del Dashboard */}
         <header className="header">
