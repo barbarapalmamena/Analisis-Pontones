@@ -329,20 +329,20 @@ export default function DashboardPage() {
         {/* Cabecera del Dashboard */}
         <header className="header">
           <div className="titleArea">
-            <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-              Panel de Control de Telemetría
+            <div className="titleHeaderContainer">
+              <h1>Panel de Control de Telemetría</h1>
               {dataSourceMode === 'API_REAL' ? (
-                <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#10B981', border: '1px solid #10B981', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                  <span style={{ width: '6px', height: '6px', backgroundColor: '#10B981', borderRadius: '50%', display: 'inline-block', animation: 'pulse 1.2s infinite' }} />
+                <span className="badge badgeConnected">
+                  <span className="pulseDot dotGreen" />
                   API SENSORS CONNECTED
                 </span>
               ) : (
-                <span className="badge" style={{ backgroundColor: 'rgba(127, 119, 221, 0.1)', color: '#AFA9EC', border: '1px solid #7F77DD', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                  <span style={{ width: '6px', height: '6px', backgroundColor: '#7F77DD', borderRadius: '50%', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
+                <span className="badge badgeSimulated">
+                  <span className="pulseDot dotPurple" />
                   SIMULATION ACTIVE (WAITING FOR API)
                 </span>
               )}
-            </h1>
+            </div>
             <p>Monitoreo climático, oceanográfico e IoT para la toma de decisiones en el centro de cultivo.</p>
           </div>
           
