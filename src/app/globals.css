@@ -625,4 +625,31 @@ h1, h2, h3, h4, h5, h6 {
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 0.75rem;
   }
+
+  .table th {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .table td {
+    padding: 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .sliderHeader {
+    font-size: 0.8rem;
+  }
+
+  .sliderGroup {
+    margin-bottom: 1rem;
+  }
+
+  .dashboardSection {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .largeSection, .sidebarSection {
+    gap: 1rem;
+  }
 }
