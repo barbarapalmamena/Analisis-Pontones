@@ -256,7 +256,7 @@ export default function DashboardPage() {
       <aside className="sidebar">
         <div className="logoArea">
           <Cpu size={28} color="#7F77DD" />
-          <span className="logoText">Australis Link</span>
+          <span className="logoText">Salmonera X</span>
         </div>
 
         <div className="sidebarCenterInfo">
@@ -321,7 +321,7 @@ export default function DashboardPage() {
         <div className="mobileTopBar">
           <div className="logoArea">
             <Cpu size={22} color="#7F77DD" />
-            <span className="logoText">Australis Link</span>
+            <span className="logoText">Salmonera X</span>
           </div>
           <span className="mobileCenterBadge">Tenglo I</span>
         </div>
